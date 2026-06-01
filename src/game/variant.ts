@@ -1,0 +1,51 @@
+import type { Card } from './cards';
+
+/** Identifies a pile within any solitaire variant. */
+export type PileRef =
+  | { zone: 'stock' }
+  | { zone: 'waste' }
+  | { zone: 'foundation'; suit: Card['suit'] }
+  | { zone: 'tableau'; index: number };
+
+export interface MoveCardsAction {
+  kind: 'move-cards';
+  from: PileRef;
+  to: PileRef;
+  /** Index of first card to move within the source pile (0 = bottom). */
+  fromIndex: number;
+  count: number;
+}
+
+export interface FlipStockAction {
+  kind: 'flip-stock';
+}
+
+export interface RecycleWasteAction {
+  kind: 'recycle-waste';
+}
+
+export type GameAction = MoveCardsAction | FlipStockAction | RecycleWasteAction;
+
+export interface VariantMeta {
+  id: string;
+  name: string;
+  description: string;
+}
+
+/** Contract each solitaire ruleset implements. */
+export interface SolitaireVariant<State> {
+  meta: VariantMeta;
+  createInitialState(seed?: number): State;
+  isWon(state: State): boolean;
+  canApply(state: State, action: GameAction): boolean;
+  apply(state: State, action: GameAction): State;
+  /** Legal destinations for a selection (used by UI). */
+  getTargetsForSelection(
+    state: State,
+    from: PileRef,
+    fromIndex: number,
+    count: number,
+  ): PileRef[];
+  /** Auto-move to foundation when unambiguous (double-tap). */
+  getAutoFoundationTarget(state: State, from: PileRef, fromIndex: number): PileRef | null;
+}
