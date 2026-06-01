@@ -297,6 +297,11 @@ button {
   grid-template-columns: repeat(7, 1fr);
 }
 
+.board__tableau--4 {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
 .board__tableau--8 {
   grid-template-columns: repeat(8, 1fr);
   gap: 4px;
@@ -313,6 +318,46 @@ button {
 
 .board--freecell {
   --card-width: clamp(40px, 9vw, 62px);
+}
+
+.board--eightoff {
+  --card-width: clamp(32px, 7vw, 50px);
+}
+
+.board__top--eightoff {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.board__freecells--8 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  width: 100%;
+}
+
+.board--canfield {
+  --card-width: clamp(40px, 9vw, 62px);
+}
+
+.board__top--canfield {
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.pile--reserve {
+  position: relative;
+}
+
+.board--scorpion {
+  --card-width: clamp(36px, 7.5vw, 52px);
+}
+
+.board__top--scorpion {
+  align-items: center;
+  gap: 16px;
 }
 
 .board--yukon {

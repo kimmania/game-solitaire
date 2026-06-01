@@ -1,3 +1,9 @@
+import { canfieldVariant } from './canfield/variant';
+import type { CanfieldState } from './canfield/types';
+import { eightOffVariant } from './eightoff/variant';
+import type { EightOffState } from './eightoff/types';
+import { scorpionVariant } from './scorpion/variant';
+import type { ScorpionState } from './scorpion/types';
 import { easthavenVariant } from './easthaven/variant';
 import type { EasthavenState } from './easthaven/types';
 import { freecellVariant } from './freecell/variant';
@@ -18,11 +24,14 @@ import type { SolitaireVariant } from './variant';
 
 /** Display order for the game picker (alphabetical by name). */
 export const VARIANTS = [
+  canfieldVariant,
   easthavenVariant,
+  eightOffVariant,
   fortyThievesVariant,
   freecellVariant,
   klondikeVariant,
   pyramidVariant,
+  scorpionVariant,
   spiderVariant,
   spider2Variant,
   spider4Variant,
@@ -40,7 +49,10 @@ export type AnyGameState =
   | EasthavenState
   | PyramidState
   | TriPeaksState
-  | FortyThievesState;
+  | FortyThievesState
+  | EightOffState
+  | CanfieldState
+  | ScorpionState;
 
 const byId: Record<VariantId, SolitaireVariant<AnyGameState>> = {
   klondike: klondikeVariant as SolitaireVariant<AnyGameState>,
@@ -53,6 +65,9 @@ const byId: Record<VariantId, SolitaireVariant<AnyGameState>> = {
   pyramid: pyramidVariant as SolitaireVariant<AnyGameState>,
   tripeaks: tripeaksVariant as SolitaireVariant<AnyGameState>,
   fortythieves: fortyThievesVariant as SolitaireVariant<AnyGameState>,
+  eightoff: eightOffVariant as SolitaireVariant<AnyGameState>,
+  canfield: canfieldVariant as SolitaireVariant<AnyGameState>,
+  scorpion: scorpionVariant as SolitaireVariant<AnyGameState>,
 };
 
 export function getVariant(id: VariantId): SolitaireVariant<AnyGameState> {

@@ -8,6 +8,8 @@ export function pileKey(ref: PileRef): string {
       return `t-${ref.index}`;
     case 'freecell':
       return `fc-${ref.index}`;
+    case 'reserve':
+      return 'reserve';
     default:
       return ref.zone;
   }

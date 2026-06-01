@@ -7,7 +7,8 @@ export type PileRef =
   | { zone: 'foundation'; suit: Card['suit'] }
   | { zone: 'foundation'; index: number }
   | { zone: 'tableau'; index: number }
-  | { zone: 'freecell'; index: number };
+  | { zone: 'freecell'; index: number }
+  | { zone: 'reserve' };
 
 export interface MoveCardsAction {
   kind: 'move-cards';
@@ -28,6 +29,10 @@ export interface RecycleWasteAction {
 
 export interface DealSpiderRowAction {
   kind: 'deal-spider-row';
+}
+
+export interface DealScorpionStockAction {
+  kind: 'deal-scorpion-stock';
 }
 
 export type PyramidPick =
@@ -51,6 +56,7 @@ export type GameAction =
   | FlipStockAction
   | RecycleWasteAction
   | DealSpiderRowAction
+  | DealScorpionStockAction
   | RemovePyramidCardsAction
   | PlayTriPeaksCardAction;
 

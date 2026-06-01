@@ -1,3 +1,6 @@
+import { canfieldHelp } from './canfield/help';
+import { eightOffHelp } from './eightoff/help';
+import { scorpionHelp } from './scorpion/help';
 import { fortyThievesHelp } from './fortythieves/help';
 import { easthavenHelp } from './easthaven/help';
 import { freecellHelp } from './freecell/help';
@@ -26,8 +29,11 @@ const HELP_BY_VARIANT: Record<VariantId, VariantHelp> = {
   'spider-2': spiderHelpByVariant['spider-2'],
   'spider-4': spiderHelpByVariant['spider-4'],
   yukon: yukonHelp,
+  canfield: canfieldHelp,
   easthaven: easthavenHelp,
+  eightoff: eightOffHelp,
   fortythieves: fortyThievesHelp,
+  scorpion: scorpionHelp,
   pyramid: pyramidHelp,
   tripeaks: tripeaksHelp,
 };

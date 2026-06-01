@@ -44,6 +44,9 @@ The workflow sets `BASE_PATH` to `/game-solitaire/` automatically from the repos
 | Pyramid | `pyramid` | Pair exposed cards that sum to 13; clear the pyramid |
 | TriPeaks | `tripeaks` | Clear three peaks — play ±1 rank onto the waste |
 | Forty Thieves | `fortythieves` | Two decks, build down in suit; eight foundations |
+| Eight Off | `eightoff` | Eight cells, build tableau down in suit |
+| Canfield | `canfield` | Reserve pile, cyclic foundations from a starter rank |
+| Scorpion | `scorpion` | Build down in suit; clear four King-to-Ace runs |
 
 Use **Games** in the header to switch. Each game saves its own in-progress state.
 
