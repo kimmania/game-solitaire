@@ -36,7 +36,9 @@ The workflow sets `BASE_PATH` to `/game-solitaire/` automatically from the repos
 |------|-----|--------|
 | Klondike | `klondike` | Classic draw-1, unlimited stock recycle |
 | FreeCell | `freecell` | All cards face up; four free cells |
-| Spider (1 suit) | `spider` | Two decks, one suit; eight sequences to win |
+| Spider (1 suit) | `spider` | Easiest — build down by rank; suit ignored |
+| Spider (2 suits) | `spider-2` | Spades & hearts — build down in matching suit |
+| Spider (4 suits) | `spider-4` | Full difficulty — all four suits |
 
 Use **Games** in the header to switch. Each game saves its own in-progress state.
 

@@ -1,6 +1,9 @@
 import { useCallback, useMemo, useState } from 'react';
 import type { AnyGameState } from '../game/registry';
 import { DEFAULT_VARIANT_ID, getVariant, type VariantId } from '../game/registry';
+import { normalizeSpiderState } from '../game/spider/rules';
+import { isSpiderVariantId } from '../game/spider/types';
+import type { SpiderState } from '../game/spider/types';
 import type { GameAction, PileRef } from '../game/variant';
 
 const STORAGE_KEY = 'solitaire-saves-v2';
@@ -28,8 +31,11 @@ function loadSaves(): Saves {
 
 function loadStateForVariant(variantId: VariantId): AnyGameState | null {
   const state = loadSaves()[variantId];
-  if (state && state.variantId === variantId) return state;
-  return null;
+  if (!state || state.variantId !== variantId) return null;
+  if (isSpiderVariantId(state.variantId)) {
+    return normalizeSpiderState(state as SpiderState);
+  }
+  return state;
 }
 
 function persistState(variantId: VariantId, state: AnyGameState) {

@@ -16,6 +16,8 @@ export function VariantBoard({ variantId, state, ...handlers }: Props) {
     case 'freecell':
       return <FreeCellBoard state={state as FreeCellState} {...handlers} />;
     case 'spider':
+    case 'spider-2':
+    case 'spider-4':
       return <SpiderBoard state={state as SpiderState} {...handlers} />;
   }
 }

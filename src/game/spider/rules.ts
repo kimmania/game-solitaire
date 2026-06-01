@@ -1,14 +1,34 @@
-import { createDoubleDeck, shuffle, type Card, type Rank } from '../cards';
+import { createDoubleDeck, shuffle, type Card, type Rank, type Suit } from '../cards';
 import { mulberry32 } from '../random';
 import type { GameAction, PileRef } from '../variant';
-import { SEQUENCE_LENGTH, SPIDER_COLUMNS, SPIDER_FOUNDATIONS, type SpiderState } from './types';
+import {
+  SEQUENCE_LENGTH,
+  SPIDER_COLUMNS,
+  SPIDER_FOUNDATIONS,
+  isSpiderVariantId,
+  spiderSuitMode,
+  type SpiderState,
+  type SpiderVariantId,
+} from './types';
 
-export function dealSpider(seed?: number): SpiderState {
-  const random = seed !== undefined ? mulberry32(seed) : Math.random;
-  const deck = shuffle(createDoubleDeck(), random).map((c) => ({
+function assignDeckSuits(deck: Card[], variantId: SpiderVariantId): Card[] {
+  const mode = spiderSuitMode(variantId);
+  if (mode === 4) return deck;
+
+  if (mode === 1) {
+    return deck.map((c) => ({ ...c, suit: 'spades' as const }));
+  }
+
+  const half = deck.length / 2;
+  return deck.map((c, i) => ({
     ...c,
-    suit: 'spades' as const,
+    suit: (i < half ? 'spades' : 'hearts') as Suit,
   }));
+}
+
+export function dealSpider(variantId: SpiderVariantId, seed?: number): SpiderState {
+  const random = seed !== undefined ? mulberry32(seed) : Math.random;
+  const deck = assignDeckSuits(shuffle(createDoubleDeck(), random), variantId);
 
   const tableau: Card[][] = Array.from({ length: SPIDER_COLUMNS }, () => []);
   let offset = 0;
@@ -23,7 +43,8 @@ export function dealSpider(seed?: number): SpiderState {
   }
 
   return {
-    variantId: 'spider',
+    variantId,
+    suitMode: spiderSuitMode(variantId),
     tableau,
     stock: deck.slice(offset).map((c) => ({ ...c, faceUp: false })),
     foundations: 0,
@@ -42,36 +63,46 @@ function getPile(state: SpiderState, ref: PileRef): Card[] {
   }
 }
 
-function isValidSpiderStack(cards: Card[]): boolean {
+function requiresSameSuit(state: SpiderState): boolean {
+  return state.suitMode > 1;
+}
+
+function isValidSpiderStack(cards: Card[], state: SpiderState): boolean {
   if (cards.length === 0) return false;
   if (!cards[0].faceUp) return false;
+
+  const stackSuit = cards[0].suit;
   for (let i = 1; i < cards.length; i++) {
     const prev = cards[i - 1];
     const curr = cards[i];
     if (!curr.faceUp) return false;
     if (prev.rank !== curr.rank + 1) return false;
+    if (requiresSameSuit(state) && curr.suit !== stackSuit) return false;
   }
   return true;
 }
 
-function canPlaceOnTableau(card: Card, target: Card[]): boolean {
+function canPlaceOnTableau(card: Card, target: Card[], state: SpiderState): boolean {
   if (!card.faceUp) return false;
   if (target.length === 0) return true;
   const dest = target[target.length - 1];
   if (!dest.faceUp) return false;
+  if (requiresSameSuit(state) && card.suit !== dest.suit) return false;
   return card.rank === dest.rank - 1;
 }
 
-function canMoveSpiderStack(cards: Card[], target: Card[]): boolean {
-  if (!isValidSpiderStack(cards)) return false;
-  return canPlaceOnTableau(cards[0], target);
+function canMoveSpiderStack(cards: Card[], target: Card[], state: SpiderState): boolean {
+  if (!isValidSpiderStack(cards, state)) return false;
+  return canPlaceOnTableau(cards[0], target, state);
 }
 
-function isCompleteSequence(cards: Card[]): boolean {
+function isCompleteSequence(cards: Card[], state: SpiderState): boolean {
   if (cards.length !== SEQUENCE_LENGTH) return false;
+  const sequenceSuit = cards[0].suit;
   for (let i = 0; i < SEQUENCE_LENGTH; i++) {
     if (!cards[i].faceUp) return false;
     if (cards[i].rank !== (SEQUENCE_LENGTH - i) as Rank) return false;
+    if (requiresSameSuit(state) && cards[i].suit !== sequenceSuit) return false;
   }
   return true;
 }
@@ -81,7 +112,7 @@ function removeCompleteSequences(state: SpiderState): void {
     while (col.length >= SEQUENCE_LENGTH) {
       const start = col.length - SEQUENCE_LENGTH;
       const tail = col.slice(start);
-      if (!isCompleteSequence(tail)) break;
+      if (!isCompleteSequence(tail, state)) break;
       col.splice(start, SEQUENCE_LENGTH);
       state.foundations++;
       const flipped = col[col.length - 1];
@@ -99,8 +130,6 @@ export function isSpiderWon(state: SpiderState): boolean {
 }
 
 export function canApplySpider(state: SpiderState, action: GameAction): boolean {
-  if (state.variantId !== 'spider') return false;
-
   if (action.kind === 'deal-spider-row') {
     return state.stock.length > 0 && !hasEmptyTableau(state);
   }
@@ -122,7 +151,7 @@ export function canApplySpider(state: SpiderState, action: GameAction): boolean 
   if (slice.length !== action.count || slice.length === 0) return false;
 
   const target = getPile(state, action.to);
-  return canMoveSpiderStack(slice, target);
+  return canMoveSpiderStack(slice, target, state);
 }
 
 export function applySpider(state: SpiderState, action: GameAction): SpiderState {
@@ -187,4 +216,11 @@ export function tableauSelectableRange(
   const card = column[cardIndex];
   if (!card?.faceUp) return null;
   return { fromIndex: cardIndex, count: column.length - cardIndex };
+}
+
+/** Restore fields missing from older saved spider games. */
+export function normalizeSpiderState(state: SpiderState): SpiderState {
+  if (!isSpiderVariantId(state.variantId)) return state;
+  const suitMode = state.suitMode ?? spiderSuitMode(state.variantId);
+  return { ...state, suitMode };
 }
