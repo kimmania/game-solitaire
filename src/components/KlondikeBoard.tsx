@@ -1,33 +1,17 @@
 import { useCallback, useMemo } from 'react';
 import { SUITS } from '../game/cards';
 import {
+  getKlondikeAutoFoundation,
   tableauSelectableRange,
   wasteTopSelectable,
 } from '../game/klondike/rules';
 import type { KlondikeState } from '../game/klondike/types';
-import type { Selection } from '../hooks/useGame';
-import type { GameAction, PileRef } from '../game/variant';
-import { getKlondikeAutoFoundation } from '../game/klondike/rules';
+import type { BoardProps } from './boardTypes';
+import { pileKey } from './boardUtils';
 import { CardView } from './CardView';
+import type { PileRef } from '../game/variant';
 
-function pileKey(ref: PileRef): string {
-  if (ref.zone === 'foundation') return `f-${ref.suit}`;
-  if (ref.zone === 'tableau') return `t-${ref.index}`;
-  return ref.zone;
-}
-
-interface GameBoardProps {
-  state: KlondikeState;
-  selection: Selection | null;
-  targets: PileRef[];
-  onSelect: (from: PileRef, fromIndex: number, count: number) => void;
-  onClearSelection: () => void;
-  onDispatch: (action: GameAction) => void;
-  onTryMoveTo: (to: PileRef) => boolean;
-  onAutoFoundation: (from: PileRef, fromIndex: number) => void;
-}
-
-export function GameBoard({
+export function KlondikeBoard({
   state,
   selection,
   targets,
@@ -36,7 +20,7 @@ export function GameBoard({
   onDispatch,
   onTryMoveTo,
   onAutoFoundation,
-}: GameBoardProps) {
+}: BoardProps<KlondikeState>) {
   const targetKeys = useMemo(() => new Set(targets.map(pileKey)), [targets]);
 
   const isTarget = useCallback((ref: PileRef) => targetKeys.has(pileKey(ref)), [targetKeys]);
@@ -110,12 +94,11 @@ export function GameBoard({
   };
 
   const handleFoundationTap = (suit: (typeof SUITS)[number]) => {
-    const ref: PileRef = { zone: 'foundation', suit };
-    handlePileTap(ref);
+    handlePileTap({ zone: 'foundation', suit });
   };
 
   return (
-    <div className="board">
+    <div className="board board--klondike">
       <div className="board__top">
         <div className="board__stock-waste">
           <button
@@ -167,7 +150,9 @@ export function GameBoard({
                 {top ? (
                   <CardView card={top} />
                 ) : (
-                  <div className="pile__placeholder pile__placeholder--suit">{suit[0].toUpperCase()}</div>
+                  <div className="pile__placeholder pile__placeholder--suit">
+                    {suit[0].toUpperCase()}
+                  </div>
                 )}
               </button>
             );
@@ -175,49 +160,49 @@ export function GameBoard({
         </div>
       </div>
 
-      <div className="board__tableau">
+      <div className="board__tableau board__tableau--7">
         {state.tableau.map((column, colIndex) => {
           const tableauRef: PileRef = { zone: 'tableau', index: colIndex };
           const columnIsTarget = isTarget(tableauRef);
           const topIndex = column.length - 1;
 
           return (
-          <div
-            key={colIndex}
-            className={`tableau-column ${column.length === 0 ? 'tableau-column--empty' : ''} ${columnIsTarget ? 'tableau-column--target' : ''}`}
-          >
-            <button
-              type="button"
-              className={`pile pile--tableau-slot ${column.length === 0 && columnIsTarget ? 'pile--target' : ''} ${column.length === 0 ? 'pile--tableau-slot-empty' : ''}`}
-              onClick={(e) => {
-                e.stopPropagation();
-                handlePileTap(tableauRef);
-              }}
-              aria-label={
-                column.length === 0
-                  ? `Empty tableau column ${colIndex + 1}${columnIsTarget ? ', drop here' : ''}`
-                  : `Tableau column ${colIndex + 1}`
-              }
+            <div
+              key={colIndex}
+              className={`tableau-column ${column.length === 0 ? 'tableau-column--empty' : ''} ${columnIsTarget ? 'tableau-column--target' : ''}`}
             >
-              {column.length === 0 && <div className="pile__placeholder" />}
-            </button>
-            <div className="tableau-column__stack">
-              {column.map((card, cardIndex) => (
-                <button
-                  key={cardIndex}
-                  type="button"
-                  className={`tableau-card ${isSelected({ zone: 'tableau', index: colIndex }, cardIndex) ? 'tableau-card--selected' : ''} ${columnIsTarget && cardIndex === topIndex ? 'tableau-card--target' : ''}`}
-                  style={{ ['--stack-offset' as string]: `${cardIndex * 28}px` }}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleTableauCard(colIndex, cardIndex);
-                  }}
-                >
-                  <CardView card={card} compact={!card.faceUp} />
-                </button>
-              ))}
+              <button
+                type="button"
+                className={`pile pile--tableau-slot ${column.length === 0 && columnIsTarget ? 'pile--target' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePileTap(tableauRef);
+                }}
+                aria-label={
+                  column.length === 0
+                    ? `Empty tableau column ${colIndex + 1}${columnIsTarget ? ', drop here' : ''}`
+                    : `Tableau column ${colIndex + 1}`
+                }
+              >
+                {column.length === 0 && <div className="pile__placeholder" />}
+              </button>
+              <div className="tableau-column__stack">
+                {column.map((card, cardIndex) => (
+                  <button
+                    key={cardIndex}
+                    type="button"
+                    className={`tableau-card ${isSelected({ zone: 'tableau', index: colIndex }, cardIndex) ? 'tableau-card--selected' : ''} ${columnIsTarget && cardIndex === topIndex ? 'tableau-card--target' : ''}`}
+                    style={{ ['--stack-offset' as string]: `${cardIndex * 28}px` }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleTableauCard(colIndex, cardIndex);
+                    }}
+                  >
+                    <CardView card={card} compact={!card.faceUp} />
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
           );
         })}
       </div>

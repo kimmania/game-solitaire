@@ -2,8 +2,7 @@
 
 Klondike solitaire as a Progressive Web App — playable in the browser and installable on phone or iPad.
 
-**Live site:** after enabling GitHub Pages, the game is served at  
-`https://<username>.github.io/game-solitaire/`
+**Play online:** [https://kimmania.github.io/game-solitaire/](https://kimmania.github.io/game-solitaire/)
 
 ## Play locally
 
@@ -31,12 +30,22 @@ Open the URL Vite prints (usually `http://localhost:5173`). For local dev the ba
 
 The workflow sets `BASE_PATH` to `/game-solitaire/` automatically from the repository name.
 
+## Games
+
+| Game | Id | Notes |
+|------|-----|--------|
+| Klondike | `klondike` | Classic draw-1, unlimited stock recycle |
+| FreeCell | `freecell` | All cards face up; four free cells |
+| Spider (1 suit) | `spider` | Two decks, one suit; eight sequences to win |
+
+Use **Games** in the header to switch. Each game saves its own in-progress state.
+
 ## Architecture
 
-- **`src/game/variant.ts`** — shared contract for any solitaire ruleset (`SolitaireVariant`).
-- **`src/game/registry.ts`** — register variants; UI reads the list when multiple games exist.
-- **`src/game/klondike/`** — Klondike deal, rules, and tests (v1).
-- Future variants (Spider, FreeCell, etc.) add a folder + entry in `VARIANTS` / `byId`.
+- **`src/game/variant.ts`** — shared contract (`SolitaireVariant`, `PileRef`, `GameAction`).
+- **`src/game/registry.ts`** — register variants; drives the game picker.
+- **`src/game/<variant>/`** — rules, types, help, and tests per game.
+- **`src/components/VariantBoard.tsx`** — routes to the correct board UI per variant.
 
 Game progress is saved to `localStorage` and restored on reload.
 

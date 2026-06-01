@@ -1,5 +1,7 @@
+import { freecellHelp } from './freecell/help';
 import { klondikeHelp } from './klondike/help';
 import type { VariantId } from './registry';
+import { spiderHelp } from './spider/help';
 
 export interface HelpSection {
   title: string;
@@ -14,6 +16,8 @@ export interface VariantHelp {
 
 const HELP_BY_VARIANT: Record<VariantId, VariantHelp> = {
   klondike: klondikeHelp,
+  freecell: freecellHelp,
+  spider: spiderHelp,
 };
 
 export function getHelpForVariant(id: VariantId): VariantHelp {

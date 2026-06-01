@@ -1,14 +1,18 @@
 import { useState } from 'react';
-import { GameBoard } from './components/GameBoard';
+import { GamePicker } from './components/GamePicker';
 import { HelpDialog } from './components/HelpDialog';
+import { VariantBoard } from './components/VariantBoard';
 import { getHelpForVariant } from './game/help';
-import { DEFAULT_VARIANT_ID, VARIANTS } from './game/registry';
-import type { KlondikeState } from './game/klondike/types';
+import { VARIANTS } from './game/registry';
 import { useGame } from './hooks/useGame';
 
 export default function App() {
   const [helpOpen, setHelpOpen] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+
   const {
+    variantId,
+    changeVariant,
     variant,
     state,
     won,
@@ -21,21 +25,30 @@ export default function App() {
     dispatch,
     newGame,
     autoFoundation,
-  } = useGame(DEFAULT_VARIANT_ID);
+  } = useGame();
 
-  const klondikeState = state as KlondikeState;
-  const help = getHelpForVariant(variant.meta.id);
+  const help = getHelpForVariant(variantId);
 
   return (
     <div className="app">
       <header className="app__header">
         <div>
           <h1 className="app__title">Solitaire</h1>
-          <p className="app__variant">{variant.meta.name}</p>
+          <button
+            type="button"
+            className="app__variant-btn"
+            onClick={() => setPickerOpen(true)}
+            aria-haspopup="dialog"
+          >
+            {variant.meta.name} ▾
+          </button>
         </div>
         <div className="app__stats">
           <span>Moves: {moves}</span>
           <div className="app__actions">
+            <button type="button" className="btn btn--ghost" onClick={() => setPickerOpen(true)}>
+              Games
+            </button>
             <button type="button" className="btn btn--ghost" onClick={() => setHelpOpen(true)}>
               Help
             </button>
@@ -56,8 +69,9 @@ export default function App() {
       )}
 
       <main className="app__main">
-        <GameBoard
-          state={klondikeState}
+        <VariantBoard
+          variantId={variantId}
+          state={state}
           selection={selection}
           targets={targets}
           onSelect={select}
@@ -70,15 +84,23 @@ export default function App() {
 
       <footer className="app__footer">
         <p>
-          New to the game?{' '}
+          {VARIANTS.length} games available —{' '}
+          <button type="button" className="link-btn" onClick={() => setPickerOpen(true)}>
+            switch game
+          </button>
+          {' · '}
           <button type="button" className="link-btn" onClick={() => setHelpOpen(true)}>
-            Read how to play
+            how to play
           </button>
         </p>
-        {VARIANTS.length > 1 ? null : (
-          <p className="app__footer-note">More game styles coming in a future update.</p>
-        )}
       </footer>
+
+      <GamePicker
+        open={pickerOpen}
+        currentId={variantId}
+        onSelect={changeVariant}
+        onClose={() => setPickerOpen(false)}
+      />
 
       <HelpDialog help={help} open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>

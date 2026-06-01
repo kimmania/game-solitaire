@@ -54,6 +54,10 @@ export function createDeck(): Card[] {
   return deck;
 }
 
+export function createDoubleDeck(): Card[] {
+  return [...createDeck(), ...createDeck()].map((c) => ({ ...c }));
+}
+
 export function shuffle<T>(items: T[], random = Math.random): T[] {
   const copy = [...items];
   for (let i = copy.length - 1; i > 0; i--) {

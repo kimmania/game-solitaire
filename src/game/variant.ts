@@ -5,7 +5,9 @@ export type PileRef =
   | { zone: 'stock' }
   | { zone: 'waste' }
   | { zone: 'foundation'; suit: Card['suit'] }
-  | { zone: 'tableau'; index: number };
+  | { zone: 'foundation'; index: number }
+  | { zone: 'tableau'; index: number }
+  | { zone: 'freecell'; index: number };
 
 export interface MoveCardsAction {
   kind: 'move-cards';
@@ -24,7 +26,15 @@ export interface RecycleWasteAction {
   kind: 'recycle-waste';
 }
 
-export type GameAction = MoveCardsAction | FlipStockAction | RecycleWasteAction;
+export interface DealSpiderRowAction {
+  kind: 'deal-spider-row';
+}
+
+export type GameAction =
+  | MoveCardsAction
+  | FlipStockAction
+  | RecycleWasteAction
+  | DealSpiderRowAction;
 
 export interface VariantMeta {
   id: string;

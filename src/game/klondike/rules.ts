@@ -56,9 +56,12 @@ function getPile(state: KlondikeState, ref: PileRef): Card[] {
     case 'waste':
       return state.waste;
     case 'foundation':
-      return state.foundations[ref.suit];
+      if ('suit' in ref) return state.foundations[ref.suit];
+      return [];
     case 'tableau':
       return state.tableau[ref.index];
+    default:
+      return [];
   }
 }
 
@@ -123,6 +126,8 @@ export function canApplyKlondike(state: KlondikeState, action: GameAction): bool
       }
       return canMoveStack(slice, target);
     }
+    default:
+      return false;
   }
 }
 

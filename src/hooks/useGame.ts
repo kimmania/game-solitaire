@@ -3,30 +3,39 @@ import type { AnyGameState } from '../game/registry';
 import { DEFAULT_VARIANT_ID, getVariant, type VariantId } from '../game/registry';
 import type { GameAction, PileRef } from '../game/variant';
 
-const STORAGE_KEY = 'solitaire-save-v1';
+const STORAGE_KEY = 'solitaire-saves-v2';
+const LEGACY_STORAGE_KEY = 'solitaire-save-v1';
 
-interface SavedGame {
-  variantId: VariantId;
-  state: AnyGameState;
-}
+type Saves = Partial<Record<VariantId, AnyGameState>>;
 
-function loadSaved(): SavedGame | null {
+function loadSaves(): Saves {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as SavedGame;
-    if (parsed.variantId !== 'klondike' || parsed.state.variantId !== 'klondike') {
-      return null;
+    if (raw) return JSON.parse(raw) as Saves;
+
+    const legacy = localStorage.getItem(LEGACY_STORAGE_KEY);
+    if (legacy) {
+      const parsed = JSON.parse(legacy) as { variantId: VariantId; state: AnyGameState };
+      if (parsed.variantId === 'klondike' && parsed.state.variantId === 'klondike') {
+        return { klondike: parsed.state };
+      }
     }
-    return parsed;
   } catch {
-    return null;
+    /* ignore */
   }
+  return {};
 }
 
-function persist(variantId: VariantId, state: AnyGameState) {
-  const payload: SavedGame = { variantId, state };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+function loadStateForVariant(variantId: VariantId): AnyGameState | null {
+  const state = loadSaves()[variantId];
+  if (state && state.variantId === variantId) return state;
+  return null;
+}
+
+function persistState(variantId: VariantId, state: AnyGameState) {
+  const saves = loadSaves();
+  saves[variantId] = state;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(saves));
 }
 
 export interface Selection {
@@ -40,14 +49,19 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
   const variant = useMemo(() => getVariant(variantId), [variantId]);
 
   const [state, setState] = useState<AnyGameState>(() => {
-    const saved = loadSaved();
-    if (saved && saved.variantId === initialVariantId) return saved.state;
-    return variant.createInitialState();
+    return loadStateForVariant(initialVariantId) ?? variant.createInitialState();
   });
 
   const [selection, setSelection] = useState<Selection | null>(null);
 
   const won = variant.isWon(state);
+
+  const changeVariant = useCallback((id: VariantId) => {
+    const nextVariant = getVariant(id);
+    setVariantId(id);
+    setState(loadStateForVariant(id) ?? nextVariant.createInitialState());
+    setSelection(null);
+  }, []);
 
   const dispatch = useCallback(
     (action: GameAction) => {
@@ -56,9 +70,13 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
       setState((prev) => {
         if (!variant.canApply(prev, action)) return prev;
         const next = variant.apply(prev, action);
-        persist(variantId, next);
+        persistState(variantId, next);
 
-        if (action.kind === 'flip-stock' && next.variantId === 'klondike' && next.waste.length > 0) {
+        if (
+          action.kind === 'flip-stock' &&
+          next.variantId === 'klondike' &&
+          next.waste.length > 0
+        ) {
           selectWaste = {
             from: { zone: 'waste' },
             fromIndex: next.waste.length - 1,
@@ -79,21 +97,14 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
       const next = variant.createInitialState(seed);
       setState(next);
       setSelection(null);
-      persist(variantId, next);
+      persistState(variantId, next);
     },
     [variant, variantId],
   );
 
-  const clearSave = useCallback(() => {
-    localStorage.removeItem(STORAGE_KEY);
+  const select = useCallback((from: PileRef, fromIndex: number, count: number) => {
+    setSelection({ from, fromIndex, count });
   }, []);
-
-  const select = useCallback(
-    (from: PileRef, fromIndex: number, count: number) => {
-      setSelection({ from, fromIndex, count });
-    },
-    [],
-  );
 
   const clearSelection = useCallback(() => setSelection(null), []);
 
@@ -141,7 +152,7 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
 
   return {
     variantId,
-    setVariantId,
+    changeVariant,
     variant,
     state,
     won,
@@ -153,7 +164,6 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
     tryMoveTo,
     dispatch,
     newGame,
-    clearSave,
     autoFoundation,
   };
 }
