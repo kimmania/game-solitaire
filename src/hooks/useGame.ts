@@ -3,6 +3,7 @@ import type { AnyGameState } from '../game/registry';
 import { DEFAULT_VARIANT_ID, getVariant, type VariantId } from '../game/registry';
 import { normalizeSpiderState } from '../game/spider/rules';
 import { isSpiderVariantId } from '../game/spider/types';
+import type { EasthavenState } from '../game/easthaven/types';
 import type { SpiderState } from '../game/spider/types';
 import type { GameAction, PileRef } from '../game/variant';
 
@@ -34,6 +35,9 @@ function loadStateForVariant(variantId: VariantId): AnyGameState | null {
   if (!state || state.variantId !== variantId) return null;
   if (isSpiderVariantId(state.variantId)) {
     return normalizeSpiderState(state as SpiderState);
+  }
+  if (state.variantId === 'easthaven' && !('hasRecycled' in state)) {
+    return { ...(state as EasthavenState), hasRecycled: false };
   }
   return state;
 }
@@ -80,7 +84,8 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
 
         if (
           action.kind === 'flip-stock' &&
-          next.variantId === 'klondike' &&
+          (next.variantId === 'klondike' || next.variantId === 'easthaven') &&
+          'waste' in next &&
           next.waste.length > 0
         ) {
           selectWaste = {

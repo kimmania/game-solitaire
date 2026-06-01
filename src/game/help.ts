@@ -1,7 +1,9 @@
+import { easthavenHelp } from './easthaven/help';
 import { freecellHelp } from './freecell/help';
 import { klondikeHelp } from './klondike/help';
 import type { VariantId } from './registry';
 import { spiderHelpByVariant } from './spider/help';
+import { yukonHelp } from './yukon/help';
 
 export interface HelpSection {
   title: string;
@@ -20,6 +22,8 @@ const HELP_BY_VARIANT: Record<VariantId, VariantHelp> = {
   spider: spiderHelpByVariant.spider,
   'spider-2': spiderHelpByVariant['spider-2'],
   'spider-4': spiderHelpByVariant['spider-4'],
+  yukon: yukonHelp,
+  easthaven: easthavenHelp,
 };
 
 export function getHelpForVariant(id: VariantId): VariantHelp {

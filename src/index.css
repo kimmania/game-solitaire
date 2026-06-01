@@ -315,6 +315,15 @@ button {
   --card-width: clamp(40px, 9vw, 62px);
 }
 
+.board--yukon {
+  --card-width: clamp(40px, 9vw, 62px);
+}
+
+.board__top--foundations-only {
+  justify-content: flex-end;
+  width: 100%;
+}
+
 .board__top--freecell {
   justify-content: space-between;
   width: 100%;

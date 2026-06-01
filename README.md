@@ -39,6 +39,8 @@ The workflow sets `BASE_PATH` to `/game-solitaire/` automatically from the repos
 | Spider (1 suit) | `spider` | Easiest — build down by rank; suit ignored |
 | Spider (2 suits) | `spider-2` | Spades & hearts — build down in matching suit |
 | Spider (4 suits) | `spider-4` | Full difficulty — all four suits |
+| Yukon | `yukon` | All face up; move any face-up stack (alternating build) |
+| Easthaven | `easthaven` | Build down in suit; one card at a time; stock + one recycle |
 
 Use **Games** in the header to switch. Each game saves its own in-progress state.
 
