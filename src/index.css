@@ -324,6 +324,75 @@ button {
   width: 100%;
 }
 
+.board--pyramid {
+  --card-width: clamp(40px, 10vw, 56px);
+}
+
+.board__top--pyramid {
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pyramid-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+@media (min-width: 500px) {
+  .pyramid-hint {
+    flex: 1 1 auto;
+    text-align: right;
+  }
+}
+
+.pyramid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 0 16px;
+}
+
+.pyramid__row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.pyramid__slot {
+  width: var(--card-width);
+  height: var(--card-height);
+}
+
+.pyramid__card {
+  padding: 0;
+  border-radius: var(--radius);
+  transition: opacity 0.15s ease;
+}
+
+.pyramid__card--buried {
+  opacity: 0.55;
+}
+
+.pyramid__card--selected .card,
+.pyramid__card--target .card {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+.pyramid__card--target .card {
+  outline-style: dashed;
+}
+
+.pyramid__card:disabled {
+  cursor: default;
+}
+
 .board__top--freecell {
   justify-content: space-between;
   width: 100%;
@@ -377,6 +446,10 @@ button {
   color: var(--gold);
 }
 
+.game-picker.help-dialog {
+  overflow: hidden;
+}
+
 .game-picker__list {
   list-style: none;
   margin: 0;
@@ -384,6 +457,10 @@ button {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .game-picker__item {

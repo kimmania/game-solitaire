@@ -4,6 +4,7 @@ import { DEFAULT_VARIANT_ID, getVariant, type VariantId } from '../game/registry
 import { normalizeSpiderState } from '../game/spider/rules';
 import { isSpiderVariantId } from '../game/spider/types';
 import type { EasthavenState } from '../game/easthaven/types';
+import type { PyramidState } from '../game/pyramid/types';
 import type { SpiderState } from '../game/spider/types';
 import type { GameAction, PileRef } from '../game/variant';
 
@@ -38,6 +39,9 @@ function loadStateForVariant(variantId: VariantId): AnyGameState | null {
   }
   if (state.variantId === 'easthaven' && !('hasRecycled' in state)) {
     return { ...(state as EasthavenState), hasRecycled: false };
+  }
+  if (state.variantId === 'pyramid' && !('hasRecycled' in state)) {
+    return { ...(state as PyramidState), hasRecycled: false };
   }
   return state;
 }

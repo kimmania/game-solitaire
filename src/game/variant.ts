@@ -30,11 +30,21 @@ export interface DealSpiderRowAction {
   kind: 'deal-spider-row';
 }
 
+export type PyramidPick =
+  | { zone: 'pyramid'; row: number; col: number }
+  | { zone: 'waste' };
+
+export interface RemovePyramidCardsAction {
+  kind: 'remove-pyramid-cards';
+  picks: PyramidPick[];
+}
+
 export type GameAction =
   | MoveCardsAction
   | FlipStockAction
   | RecycleWasteAction
-  | DealSpiderRowAction;
+  | DealSpiderRowAction
+  | RemovePyramidCardsAction;
 
 export interface VariantMeta {
   id: string;
