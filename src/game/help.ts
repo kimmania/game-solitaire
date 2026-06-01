@@ -1,9 +1,11 @@
+import { fortyThievesHelp } from './fortythieves/help';
 import { easthavenHelp } from './easthaven/help';
 import { freecellHelp } from './freecell/help';
 import { klondikeHelp } from './klondike/help';
 import type { VariantId } from './registry';
 import { spiderHelpByVariant } from './spider/help';
 import { pyramidHelp } from './pyramid/help';
+import { tripeaksHelp } from './tripeaks/help';
 import { yukonHelp } from './yukon/help';
 
 export interface HelpSection {
@@ -25,7 +27,9 @@ const HELP_BY_VARIANT: Record<VariantId, VariantHelp> = {
   'spider-4': spiderHelpByVariant['spider-4'],
   yukon: yukonHelp,
   easthaven: easthavenHelp,
+  fortythieves: fortyThievesHelp,
   pyramid: pyramidHelp,
+  tripeaks: tripeaksHelp,
 };
 
 export function getHelpForVariant(id: VariantId): VariantHelp {

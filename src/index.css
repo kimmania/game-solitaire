@@ -393,6 +393,108 @@ button {
   cursor: default;
 }
 
+.board--tripeaks {
+  --card-width: clamp(36px, 8vw, 52px);
+}
+
+.board__top--tripeaks {
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.tripeaks-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.85;
+  flex: 1 1 100%;
+  text-align: center;
+}
+
+@media (min-width: 500px) {
+  .tripeaks-hint {
+    flex: 1 1 auto;
+    text-align: right;
+  }
+}
+
+.tripeaks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 0 16px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.tripeaks__row {
+  display: flex;
+  gap: 6px;
+  justify-content: flex-start;
+}
+
+.tripeaks__row:nth-child(2) {
+  margin-left: calc((var(--card-width) + 6px) * 0.5);
+}
+
+.tripeaks__row:nth-child(3) {
+  margin-left: calc(var(--card-width) + 6px);
+}
+
+.tripeaks__row:nth-child(4) {
+  margin-left: calc((var(--card-width) + 6px) * 1.5);
+}
+
+.tripeaks__slot {
+  width: var(--card-width);
+  height: var(--card-height);
+}
+
+.tripeaks__card {
+  padding: 0;
+  border-radius: var(--radius);
+  transition: opacity 0.15s ease;
+}
+
+.tripeaks__card--buried {
+  opacity: 0.55;
+}
+
+.tripeaks__card--target .card {
+  outline: 3px dashed var(--gold);
+  outline-offset: 2px;
+  border-radius: var(--radius);
+}
+
+.tripeaks__card:disabled {
+  cursor: default;
+}
+
+.board--fortythieves {
+  --card-width: clamp(28px, 6vw, 46px);
+}
+
+.board__top--fortythieves {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.board__foundations--8 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  width: 100%;
+}
+
+.tableau-column__stack--spread .tableau-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
 .board__top--freecell {
   justify-content: space-between;
   width: 100%;

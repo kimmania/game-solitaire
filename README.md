@@ -42,6 +42,8 @@ The workflow sets `BASE_PATH` to `/game-solitaire/` automatically from the repos
 | Yukon | `yukon` | All face up; move any face-up stack (alternating build) |
 | Easthaven | `easthaven` | Build down in suit; one card at a time; stock + one recycle |
 | Pyramid | `pyramid` | Pair exposed cards that sum to 13; clear the pyramid |
+| TriPeaks | `tripeaks` | Clear three peaks — play ±1 rank onto the waste |
+| Forty Thieves | `fortythieves` | Two decks, build down in suit; eight foundations |
 
 Use **Games** in the header to switch. Each game saves its own in-progress state.
 

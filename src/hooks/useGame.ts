@@ -88,7 +88,9 @@ export function useGame(initialVariantId: VariantId = DEFAULT_VARIANT_ID) {
 
         if (
           action.kind === 'flip-stock' &&
-          (next.variantId === 'klondike' || next.variantId === 'easthaven') &&
+          (next.variantId === 'klondike' ||
+            next.variantId === 'easthaven' ||
+            next.variantId === 'fortythieves') &&
           'waste' in next &&
           next.waste.length > 0
         ) {

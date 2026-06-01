@@ -39,12 +39,20 @@ export interface RemovePyramidCardsAction {
   picks: PyramidPick[];
 }
 
+export type TriPeaksPick = { zone: 'tripeaks'; row: number; col: number };
+
+export interface PlayTriPeaksCardAction {
+  kind: 'play-tripeaks-card';
+  pick: TriPeaksPick;
+}
+
 export type GameAction =
   | MoveCardsAction
   | FlipStockAction
   | RecycleWasteAction
   | DealSpiderRowAction
-  | RemovePyramidCardsAction;
+  | RemovePyramidCardsAction
+  | PlayTriPeaksCardAction;
 
 export interface VariantMeta {
   id: string;

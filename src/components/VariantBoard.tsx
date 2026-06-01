@@ -3,11 +3,15 @@ import type { FreeCellState } from '../game/freecell/types';
 import type { EasthavenState } from '../game/easthaven/types';
 import type { KlondikeState } from '../game/klondike/types';
 import type { SpiderState } from '../game/spider/types';
+import type { FortyThievesState } from '../game/fortythieves/types';
 import type { PyramidState } from '../game/pyramid/types';
+import type { TriPeaksState } from '../game/tripeaks/types';
 import type { YukonState } from '../game/yukon/types';
 import type { BoardProps } from './boardTypes';
 import { EasthavenBoard } from './EasthavenBoard';
+import { FortyThievesBoard } from './FortyThievesBoard';
 import { PyramidBoard } from './PyramidBoard';
+import { TriPeaksBoard } from './TriPeaksBoard';
 import { FreeCellBoard } from './FreeCellBoard';
 import { KlondikeBoard } from './KlondikeBoard';
 import { SpiderBoard } from './SpiderBoard';
@@ -36,5 +40,14 @@ export function VariantBoard({ variantId, state, ...handlers }: Props) {
           onDispatch={handlers.onDispatch}
         />
       );
+    case 'tripeaks':
+      return (
+        <TriPeaksBoard
+          state={state as TriPeaksState}
+          onDispatch={handlers.onDispatch}
+        />
+      );
+    case 'fortythieves':
+      return <FortyThievesBoard state={state as FortyThievesState} {...handlers} />;
   }
 }

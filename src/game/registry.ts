@@ -6,8 +6,12 @@ import { klondikeVariant } from './klondike/variant';
 import type { KlondikeState } from './klondike/types';
 import { spider2Variant, spider4Variant, spiderVariant } from './spider/variant';
 import type { SpiderState } from './spider/types';
+import { fortyThievesVariant } from './fortythieves/variant';
+import type { FortyThievesState } from './fortythieves/types';
 import { pyramidVariant } from './pyramid/variant';
 import type { PyramidState } from './pyramid/types';
+import { tripeaksVariant } from './tripeaks/variant';
+import type { TriPeaksState } from './tripeaks/types';
 import { yukonVariant } from './yukon/variant';
 import type { YukonState } from './yukon/types';
 import type { SolitaireVariant } from './variant';
@@ -15,12 +19,14 @@ import type { SolitaireVariant } from './variant';
 /** Display order for the game picker (alphabetical by name). */
 export const VARIANTS = [
   easthavenVariant,
+  fortyThievesVariant,
   freecellVariant,
   klondikeVariant,
   pyramidVariant,
   spiderVariant,
   spider2Variant,
   spider4Variant,
+  tripeaksVariant,
   yukonVariant,
 ] as const;
 
@@ -32,7 +38,9 @@ export type AnyGameState =
   | SpiderState
   | YukonState
   | EasthavenState
-  | PyramidState;
+  | PyramidState
+  | TriPeaksState
+  | FortyThievesState;
 
 const byId: Record<VariantId, SolitaireVariant<AnyGameState>> = {
   klondike: klondikeVariant as SolitaireVariant<AnyGameState>,
@@ -43,6 +51,8 @@ const byId: Record<VariantId, SolitaireVariant<AnyGameState>> = {
   yukon: yukonVariant as SolitaireVariant<AnyGameState>,
   easthaven: easthavenVariant as SolitaireVariant<AnyGameState>,
   pyramid: pyramidVariant as SolitaireVariant<AnyGameState>,
+  tripeaks: tripeaksVariant as SolitaireVariant<AnyGameState>,
+  fortythieves: fortyThievesVariant as SolitaireVariant<AnyGameState>,
 };
 
 export function getVariant(id: VariantId): SolitaireVariant<AnyGameState> {
