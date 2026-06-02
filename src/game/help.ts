@@ -1,3 +1,7 @@
+import { beleagueredCastleHelp } from './beleagueredcastle/help';
+import { bakersDozenHelp } from './bakersdozen/help';
+import { clockHelp } from './clock/help';
+import { monteCarloHelp } from './montecarlo/help';
 import { canfieldHelp } from './canfield/help';
 import { eightOffHelp } from './eightoff/help';
 import { scorpionHelp } from './scorpion/help';
@@ -29,8 +33,12 @@ const HELP_BY_VARIANT: Record<VariantId, VariantHelp> = {
   'spider-2': spiderHelpByVariant['spider-2'],
   'spider-4': spiderHelpByVariant['spider-4'],
   yukon: yukonHelp,
+  bakersdozen: bakersDozenHelp,
+  beleagueredcastle: beleagueredCastleHelp,
   canfield: canfieldHelp,
+  clock: clockHelp,
   easthaven: easthavenHelp,
+  montecarlo: monteCarloHelp,
   eightoff: eightOffHelp,
   fortythieves: fortyThievesHelp,
   scorpion: scorpionHelp,

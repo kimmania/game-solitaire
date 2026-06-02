@@ -1,3 +1,11 @@
+import { beleagueredCastleVariant } from './beleagueredcastle/variant';
+import type { BeleagueredCastleState } from './beleagueredcastle/types';
+import { bakersDozenVariant } from './bakersdozen/variant';
+import type { BakersDozenState } from './bakersdozen/types';
+import { clockVariant } from './clock/variant';
+import type { ClockState } from './clock/types';
+import { monteCarloVariant } from './montecarlo/variant';
+import type { MonteCarloState } from './montecarlo/types';
 import { canfieldVariant } from './canfield/variant';
 import type { CanfieldState } from './canfield/types';
 import { eightOffVariant } from './eightoff/variant';
@@ -24,12 +32,16 @@ import type { SolitaireVariant } from './variant';
 
 /** Display order for the game picker (alphabetical by name). */
 export const VARIANTS = [
+  bakersDozenVariant,
+  beleagueredCastleVariant,
   canfieldVariant,
+  clockVariant,
   easthavenVariant,
   eightOffVariant,
   fortyThievesVariant,
   freecellVariant,
   klondikeVariant,
+  monteCarloVariant,
   pyramidVariant,
   scorpionVariant,
   spiderVariant,
@@ -52,7 +64,11 @@ export type AnyGameState =
   | FortyThievesState
   | EightOffState
   | CanfieldState
-  | ScorpionState;
+  | ScorpionState
+  | MonteCarloState
+  | ClockState
+  | BakersDozenState
+  | BeleagueredCastleState;
 
 const byId: Record<VariantId, SolitaireVariant<AnyGameState>> = {
   klondike: klondikeVariant as SolitaireVariant<AnyGameState>,
@@ -68,6 +84,10 @@ const byId: Record<VariantId, SolitaireVariant<AnyGameState>> = {
   eightoff: eightOffVariant as SolitaireVariant<AnyGameState>,
   canfield: canfieldVariant as SolitaireVariant<AnyGameState>,
   scorpion: scorpionVariant as SolitaireVariant<AnyGameState>,
+  montecarlo: monteCarloVariant as SolitaireVariant<AnyGameState>,
+  clock: clockVariant as SolitaireVariant<AnyGameState>,
+  bakersdozen: bakersDozenVariant as SolitaireVariant<AnyGameState>,
+  beleagueredcastle: beleagueredCastleVariant as SolitaireVariant<AnyGameState>,
 };
 
 export function getVariant(id: VariantId): SolitaireVariant<AnyGameState> {

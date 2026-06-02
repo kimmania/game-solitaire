@@ -8,7 +8,8 @@ export type PileRef =
   | { zone: 'foundation'; index: number }
   | { zone: 'tableau'; index: number }
   | { zone: 'freecell'; index: number }
-  | { zone: 'reserve' };
+  | { zone: 'reserve' }
+  | { zone: 'reserve'; index: number };
 
 export interface MoveCardsAction {
   kind: 'move-cards';
@@ -51,6 +52,21 @@ export interface PlayTriPeaksCardAction {
   pick: TriPeaksPick;
 }
 
+export type MonteCarloPick = { zone: 'grid'; row: number; col: number };
+
+export interface RemoveMonteCarloPairAction {
+  kind: 'remove-monte-carlo-pair';
+  picks: [MonteCarloPick, MonteCarloPick];
+}
+
+export interface RedealMonteCarloAction {
+  kind: 'redeal-monte-carlo';
+}
+
+export interface FlipClockAction {
+  kind: 'flip-clock';
+}
+
 export type GameAction =
   | MoveCardsAction
   | FlipStockAction
@@ -58,7 +74,10 @@ export type GameAction =
   | DealSpiderRowAction
   | DealScorpionStockAction
   | RemovePyramidCardsAction
-  | PlayTriPeaksCardAction;
+  | PlayTriPeaksCardAction
+  | RemoveMonteCarloPairAction
+  | RedealMonteCarloAction
+  | FlipClockAction;
 
 export interface VariantMeta {
   id: string;

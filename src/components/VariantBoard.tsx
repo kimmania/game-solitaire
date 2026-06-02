@@ -1,4 +1,8 @@
 import type { AnyGameState, VariantId } from '../game/registry';
+import type { BeleagueredCastleState } from '../game/beleagueredcastle/types';
+import type { BakersDozenState } from '../game/bakersdozen/types';
+import type { ClockState } from '../game/clock/types';
+import type { MonteCarloState } from '../game/montecarlo/types';
 import type { CanfieldState } from '../game/canfield/types';
 import type { EightOffState } from '../game/eightoff/types';
 import type { ScorpionState } from '../game/scorpion/types';
@@ -11,6 +15,10 @@ import type { PyramidState } from '../game/pyramid/types';
 import type { TriPeaksState } from '../game/tripeaks/types';
 import type { YukonState } from '../game/yukon/types';
 import type { BoardProps } from './boardTypes';
+import { BeleagueredCastleBoard } from './BeleagueredCastleBoard';
+import { BakersDozenBoard } from './BakersDozenBoard';
+import { ClockBoard } from './ClockBoard';
+import { MonteCarloBoard } from './MonteCarloBoard';
 import { CanfieldBoard } from './CanfieldBoard';
 import { EightOffBoard } from './EightOffBoard';
 import { ScorpionBoard } from './ScorpionBoard';
@@ -61,5 +69,25 @@ export function VariantBoard({ variantId, state, ...handlers }: Props) {
       );
     case 'fortythieves':
       return <FortyThievesBoard state={state as FortyThievesState} {...handlers} />;
+    case 'montecarlo':
+      return (
+        <MonteCarloBoard
+          state={state as MonteCarloState}
+          onDispatch={handlers.onDispatch}
+        />
+      );
+    case 'clock':
+      return (
+        <ClockBoard state={state as ClockState} onDispatch={handlers.onDispatch} />
+      );
+    case 'bakersdozen':
+      return <BakersDozenBoard state={state as BakersDozenState} {...handlers} />;
+    case 'beleagueredcastle':
+      return (
+        <BeleagueredCastleBoard
+          state={state as BeleagueredCastleState}
+          {...handlers}
+        />
+      );
   }
 }

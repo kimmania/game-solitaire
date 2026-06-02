@@ -47,6 +47,10 @@ The workflow sets `BASE_PATH` to `/game-solitaire/` automatically from the repos
 | Eight Off | `eightoff` | Eight cells, build tableau down in suit |
 | Canfield | `canfield` | Reserve pile, cyclic foundations from a starter rank |
 | Scorpion | `scorpion` | Build down in suit; clear four King-to-Ace runs |
+| Monte Carlo | `montecarlo` | Remove adjacent matching pairs; redeal when stuck |
+| Clock | `clock` | Turn cards onto their hour pile before the fourth king |
+| Baker's Dozen | `bakersdozen` | Thirteen columns; kings at bottom; build down in suit |
+| Beleaguered Castle | `beleagueredcastle` | Aces out, kings in reserve, eight columns |
 
 Use **Games** in the header to switch. Each game saves its own in-progress state.
 

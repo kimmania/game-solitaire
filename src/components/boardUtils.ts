@@ -9,7 +9,7 @@ export function pileKey(ref: PileRef): string {
     case 'freecell':
       return `fc-${ref.index}`;
     case 'reserve':
-      return 'reserve';
+      return 'index' in ref ? `r-${ref.index}` : 'reserve';
     default:
       return ref.zone;
   }
