@@ -66,3 +66,11 @@ Game progress is saved to `localStorage` and restored on reload.
 ## PWA
 
 The build includes a web manifest and service worker (`vite-plugin-pwa`). On iOS: **Share → Add to Home Screen**.
+
+App icons live in `public/`:
+
+- `favicon.svg` — browser tab icon (source artwork)
+- `pwa-192.png` / `pwa-512.png` — install icons
+- `pwa-512-maskable.png` — Android adaptive icon safe zone
+
+After editing the SVG, regenerate PNGs with `npm run icons`.

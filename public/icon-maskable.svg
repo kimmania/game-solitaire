@@ -9,14 +9,13 @@
       <stop offset="1" stop-color="#f0ead8"/>
     </linearGradient>
     <filter id="shadow" x="-20%" y="-10%" width="140%" height="130%">
-      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.35"/>
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.3"/>
     </filter>
   </defs>
 
-  <rect width="512" height="512" rx="112" fill="url(#felt)"/>
-  <rect x="24" y="24" width="464" height="464" rx="96" stroke="#c9a227" stroke-width="6" opacity="0.35"/>
+  <rect width="512" height="512" fill="url(#felt)"/>
 
-  <g filter="url(#shadow)">
+  <g transform="translate(256 256) scale(0.72) translate(-256 -256)" filter="url(#shadow)">
     <g transform="translate(118 108) rotate(-14 100 150)">
       <rect width="200" height="280" rx="22" fill="url(#card)" stroke="#c9a227" stroke-width="8"/>
       <path
@@ -30,11 +29,6 @@
       <path
         d="M100 96c-28 0-50 22-50 49 0 19 11 35 28 44-10 7-16 18-16 30 0 24 17 43 38 43s38-19 38-43c0-12-6-23-16-30 17-9 28-25 28-44 0-27-22-49-50-49z"
         fill="#b91c1c"
-      />
-      <path
-        d="M100 128c-14 0-25 10-25 23s11 23 25 23 25-10 25-23-11-23-25-23z"
-        fill="#b91c1c"
-        opacity="0.25"
       />
     </g>
 
