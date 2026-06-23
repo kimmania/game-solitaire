@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from 'react';
 import { SUITS } from '../game/cards';
 import {
   getEasthavenAutoFoundation,
@@ -10,6 +9,7 @@ import type { BoardProps } from './boardTypes';
 import { pileKey } from './boardUtils';
 import { CardView } from './CardView';
 import type { PileRef } from '../game/variant';
+import { useBoardSelection } from '../hooks/useBoardSelection';
 
 export function EasthavenBoard({
   state,
@@ -21,16 +21,8 @@ export function EasthavenBoard({
   onTryMoveTo,
   onAutoFoundation,
 }: BoardProps<EasthavenState>) {
-  const targetKeys = useMemo(() => new Set(targets.map(pileKey)), [targets]);
-  const isTarget = useCallback((ref: PileRef) => targetKeys.has(pileKey(ref)), [targetKeys]);
+  const { isTarget, isSelected } = useBoardSelection(selection, targets);
 
-  const isSelected = useCallback(
-    (ref: PileRef, index: number) =>
-      selection !== null &&
-      pileKey(selection.from) === pileKey(ref) &&
-      index >= selection.fromIndex,
-    [selection],
-  );
 
   const canRecycle =
     state.stock.length === 0 && state.waste.length > 0 && !state.hasRecycled;

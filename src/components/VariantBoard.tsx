@@ -89,5 +89,7 @@ export function VariantBoard({ variantId, state, ...handlers }: Props) {
           {...handlers}
         />
       );
+  default:
+    throw new Error(`Unhandled variant: ${variantId as string}`);
   }
 }

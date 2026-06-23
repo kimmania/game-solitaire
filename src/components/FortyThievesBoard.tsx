@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from 'react';
 import { suitSymbol } from '../game/cards';
 import {
   foundationSuitForIndex,
@@ -11,6 +10,7 @@ import type { BoardProps } from './boardTypes';
 import { pileKey } from './boardUtils';
 import { CardView } from './CardView';
 import type { PileRef } from '../game/variant';
+import { useBoardSelection } from '../hooks/useBoardSelection';
 
 export function FortyThievesBoard({
   state,
@@ -22,17 +22,8 @@ export function FortyThievesBoard({
   onTryMoveTo,
   onAutoFoundation,
 }: BoardProps<FortyThievesState>) {
-  const targetKeys = useMemo(() => new Set(targets.map(pileKey)), [targets]);
+  const { isTarget, isSelected } = useBoardSelection(selection, targets);
 
-  const isTarget = useCallback((ref: PileRef) => targetKeys.has(pileKey(ref)), [targetKeys]);
-
-  const isSelected = useCallback(
-    (ref: PileRef, index: number) =>
-      selection !== null &&
-      pileKey(selection.from) === pileKey(ref) &&
-      index === selection.fromIndex,
-    [selection],
-  );
 
   const handlePileTap = (ref: PileRef) => {
     if (selection && isTarget(ref)) {

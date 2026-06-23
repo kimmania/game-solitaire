@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from 'react';
 import { hasEmptyTableau, tableauSelectableRange } from '../game/scorpion/rules';
 import { SCORPION_FOUNDATIONS } from '../game/scorpion/types';
 import type { ScorpionState } from '../game/scorpion/types';
@@ -6,6 +5,7 @@ import type { BoardProps } from './boardTypes';
 import { pileKey } from './boardUtils';
 import { CardView } from './CardView';
 import type { PileRef } from '../game/variant';
+import { useBoardSelection } from '../hooks/useBoardSelection';
 
 export function ScorpionBoard({
   state,
@@ -16,16 +16,8 @@ export function ScorpionBoard({
   onDispatch,
   onTryMoveTo,
 }: BoardProps<ScorpionState>) {
-  const targetKeys = useMemo(() => new Set(targets.map(pileKey)), [targets]);
-  const isTarget = useCallback((ref: PileRef) => targetKeys.has(pileKey(ref)), [targetKeys]);
+  const { isTarget, isSelected } = useBoardSelection(selection, targets);
 
-  const isSelected = useCallback(
-    (ref: PileRef, index: number) =>
-      selection !== null &&
-      pileKey(selection.from) === pileKey(ref) &&
-      index >= selection.fromIndex,
-    [selection],
-  );
 
   const handleStock = () => {
     onClearSelection();

@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from 'react';
 import { SUITS } from '../game/cards';
 import {
   buildEightOffDropAction,
@@ -11,6 +10,7 @@ import type { BoardProps } from './boardTypes';
 import { pileKey } from './boardUtils';
 import { CardView } from './CardView';
 import type { PileRef } from '../game/variant';
+import { useBoardSelection } from '../hooks/useBoardSelection';
 
 export function EightOffBoard({
   state,
@@ -22,16 +22,8 @@ export function EightOffBoard({
   onTryMoveTo,
   onAutoFoundation,
 }: BoardProps<EightOffState>) {
-  const targetKeys = useMemo(() => new Set(targets.map(pileKey)), [targets]);
-  const isTarget = useCallback((ref: PileRef) => targetKeys.has(pileKey(ref)), [targetKeys]);
+  const { isTarget, isSelected } = useBoardSelection(selection, targets);
 
-  const isSelected = useCallback(
-    (ref: PileRef, index: number) =>
-      selection !== null &&
-      pileKey(selection.from) === pileKey(ref) &&
-      index >= selection.fromIndex,
-    [selection],
-  );
 
   const handlePileTap = (ref: PileRef) => {
     if (selection && isTarget(ref)) {

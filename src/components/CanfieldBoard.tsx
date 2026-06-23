@@ -1,4 +1,3 @@
-import { useCallback, useMemo } from 'react';
 import { SUITS, rankLabel } from '../game/cards';
 import {
   getCanfieldAutoFoundation,
@@ -11,6 +10,7 @@ import type { BoardProps } from './boardTypes';
 import { pileKey } from './boardUtils';
 import { CardView } from './CardView';
 import type { PileRef } from '../game/variant';
+import { useBoardSelection } from '../hooks/useBoardSelection';
 
 export function CanfieldBoard({
   state,
@@ -22,16 +22,8 @@ export function CanfieldBoard({
   onTryMoveTo,
   onAutoFoundation,
 }: BoardProps<CanfieldState>) {
-  const targetKeys = useMemo(() => new Set(targets.map(pileKey)), [targets]);
-  const isTarget = useCallback((ref: PileRef) => targetKeys.has(pileKey(ref)), [targetKeys]);
+  const { isTarget, isSelected } = useBoardSelection(selection, targets);
 
-  const isSelected = useCallback(
-    (ref: PileRef, index: number) =>
-      selection !== null &&
-      pileKey(selection.from) === pileKey(ref) &&
-      index >= selection.fromIndex,
-    [selection],
-  );
 
   const handleStock = () => {
     onClearSelection();
