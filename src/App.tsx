@@ -62,9 +62,19 @@ export default function App() {
       {won && (
         <div className="banner banner--win" role="status">
           You win!{' '}
-          <button type="button" className="btn btn--inline" onClick={() => newGame()}>
-            Play again
-          </button>
+          <div className="win-actions">
+            <button type="button" className="btn btn--inline" onClick={() => newGame()}>
+              Play again
+            </button>
+            <a
+              href="https://kimmania.github.io/games-overview/"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="btn btn--secondary"
+            >
+              More Games →
+            </a>
+          </div>
         </div>
       )}
 

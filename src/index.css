@@ -140,6 +140,32 @@ button {
   border: 1px solid var(--gold);
 }
 
+.btn--secondary {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(201, 162, 39, 0.2);
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  text-decoration: none;
+}
+
+.btn--secondary:hover {
+  background: rgba(201, 162, 39, 0.35);
+}
+
+.win-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.win-actions .btn {
+  font-size: 0.85rem;
+  padding: 6px 14px;
+}
+
 .link-btn {
   text-decoration: underline;
   text-underline-offset: 2px;
